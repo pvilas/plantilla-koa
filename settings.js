@@ -6,6 +6,11 @@ var logger = require('koa-logger');
 
 exports.carregaModuls = function (app) {
 
+    // variable global que recull variables per a totes les pàgines de jade
+    jade_global = {}
+
+    // directori de l'aplicació
+    var app_dir = '/app';
 
     //
     // gestor d'errors
@@ -107,6 +112,40 @@ exports.carregaModuls = function (app) {
 
     // koa-logger
     app.use(logger());
+
+    /* * * * *
+    *
+    * Renderitzador
+    *
+    * renderitzador de jade
+    */
+    var jade = require('koa-jade')
+
+
+    app.use(jade.middleware({
+        viewPath: __dirname + app_dir,
+        debug: false,
+        pretty: false,
+        compileDebug: false,
+        locals: jade_global,
+        basedir: __dirname + app_dir + '/jade/extends',
+        helperPath: [
+            __dirname + app_dir+ '/jade/helpers',
+            { random: __dirname + app_dir + '/jade/lib.js' },
+            { _: require('lodash') }
+        ]
+    }))
+
+
+
+    /* * * * * *
+     *
+     * Seguretat
+     *
+     */
+    var auth = require('./auth')
+    auth.setSecurity(app, app_dir)
+
 
 
 

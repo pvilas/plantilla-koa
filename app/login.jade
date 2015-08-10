@@ -1,0 +1,12 @@
+extends ./main.jade
+
+block def-body
+    body(class="sigin")
+        div(class="container sigin")
+            form(class="form-signin" method="post" action="/login")
+                h2(class="form-signin-heading") Entrar credenciales
+                label(for="inputEmail" class="sr-only") Usuario
+                input(type="text" name="username" id="username" class="form-control" value="test" placeholder="Nombre de ususario" required="" autofocus="")
+                label(for="inputPassword" class="sr-only") Password
+                input(type="password" name="password" id="password" class="form-control" value="test" placeholder="Password" required="")
+                button(id="login-buttons-password" class="btn btn-lg btn-primary btn-block login-button login-button-form-submit" type="submit") Sign in

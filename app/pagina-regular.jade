@@ -1,0 +1,129 @@
+// pagina estàndar
+mixin pagina(menus)
+    +menuSuperior2(menus)
+    +sAlert
+    //div(id="page-wrapper" class="gray-bg")
+        // menu superior
+        +menuSuperior menus=menus
+        // cos de pàgina
+        +cosPagina texte=texte
+        // peu de pàgina
+        +peuPagina
+    +peuPagina2
+
+// menu superior
+mixin menuSuperior2(menus)
+    nav(class="navbar navbar-default navbar-static-top")
+        div(class="container")
+            div(class="navbar-header")
+                button(type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar")
+                    span(class="sr-only") Toggle navigation
+                    span(class="icon-bar")
+                    span(class="icon-bar")
+                    span(class="icon-bar")
+                a(class="navbar-brand" href="#") Incidencias
+            div(id="navbar" class="collapse navbar-collapse")
+                ul(class="nav navbar-nav")
+                    each menus
+                        +posaElementMenu
+                ul(class="nav navbar-nav navbar-right")
+                    li: a(class="logout" href="#" title="Cerrar sesión") Logout
+
+mixin posaElementMenu(men)
+    if submenus
+        li(class="dropdown")
+            a(href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false") {{descripcion}}
+                span(class="caret")
+            ul(class="dropdown-menu" role="menu")
+                each submenus
+                    +posaElementSubmenu
+    else
+        li(class="{{#if isActiveRoute numero}}active{{/if}}")
+            a(href="{{url}}") {{descripcion}}
+
+mixin posaElementSubmenu
+    li: a(href="{{url}}") {{descripcion}}
+
+mixin peuPagina2
+    footer(class="footer")
+        div(class="container")
+            p(class="text-muted") {{#if currentUser}} Usuario: {{currentUser.username}} {{else}} Sin usuario {{/if}}
+
+// menu esquerra
+mixin menuEsquerra
+    div(id="wrapper")
+        nav(class="navbar-default navbar-static-side" role="navigation")
+            div(class="sidebar-collapse")
+                ul(class="nav" id="side-menu")
+                    +infoUsuari
+                    +blockSubmenus(modulo=modulo)
+
+mixin blockSubmenus
+    each modulo.submenus
+        // miram si l'usuari te un rol que permeti veure el modul
+        if estaEnRol numero
+            li(class="{{#if activo numero}}active{{/if}}")
+                a(href="{{url}}")
+                    i(class="fa fa-th-large")
+                    span(class="nav-label") {{descripcion}}
+
+mixin menuSuperior
+    div(class="row border-bottom")
+        nav(class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0")
+            div(class="navbar-header")
+                a(class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#")
+                    i(class="fa fa-bars")
+                ul(class="nav navbar-top-links navbar-right")
+                    if currentUser
+                        li(class="dropdown")
+                            a(href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false")
+                                span(id="nomModul") {{modulo.descripcion}}
+                                span(class="caret")
+                            ul(class="dropdown-menu" role="menu")
+                                each menus
+                                    li
+                                        a(href="{{url}}") {{descripcion}}
+            ul(class="nav navbar-top-links navbar-right")
+                li
+                    a(href="#")
+                        i(class="fa fa-sign-out") Log out
+
+mixin cosPagina
+    div(class="wrapper wrapper-content animated fadeInRight")
+        div(class="row")
+
+mixin proves
+    p {{texte}}
+
+mixin cos
+    div(id="page-wrapper" class="gray-bg")
+
+mixin titolPagina
+    div(class="col-lg-8")
+        h2 {{titulo}}
+
+mixin peuPagina
+    div(class="footer fixed")
+        div(class="pull-right")
+            {{pd}}
+        div
+            {{pe}}
+
+mixin infoUsuari
+    li(class="nav-header")
+        div(class="dropdown profile-element")
+            if currentUser
+                span
+                    a(data-toggle="dropdown" class="dropdown-toggle" href="#")
+                        span(class="clear")
+                            span(class="block m-t-xs")
+                                strong(class="font-bold") {{currentUser.username}}
+                            span(class="text-muted text-xs block") Jefe Sistemas {{currentUser.posicion}}
+                                b(class="caret")
+                    ul(class="dropdown-menu animated fadeInRight m-t-xs")
+                        li
+                            a(href="login.html") Logout
+            else
+                +loginButtons
+        div(class="logo-element")
+            IN
